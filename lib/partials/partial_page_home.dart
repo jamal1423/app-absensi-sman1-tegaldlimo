@@ -315,8 +315,8 @@ class _PartPageHomeState extends State<PartPageHome> {
           dialogType: DialogType.info,
           animType: AnimType.rightSlide,
           btnOkColor: Colors.blue,
-          title: 'Confirm',
-          desc: 'Press OK untuk melanjutkan absen.',
+          title: 'Konfirmasi',
+          desc: 'Yakin sudah sesuai jadwal absen?\nPress OK untuk melanjutkan absen.',
           btnOkOnPress: () {
             postDataAbsen(_usernamePost, _latitPost, _longitPost, _lokasiPost);
           },
@@ -535,10 +535,10 @@ class _PartPageHomeState extends State<PartPageHome> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Selamat Datang",
+                              "SMAN 1 TEGALDLIMO",
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 12,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 1),
@@ -546,8 +546,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                               "${snapshot.data!.nama_pegawai}",
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 15,),
                             ),
                           ],
                         );
@@ -758,7 +757,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                   : Column(
                                                       children: [
                                                         Text(
-                                                            "---- / -- / -- --:--",
+                                                            "--/--/---- --:--",
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
@@ -845,7 +844,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                   : Column(
                                                       children: [
                                                         Text(
-                                                            "---- / -- / -- --:--",
+                                                            "--/--/---- --:--",
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
@@ -917,7 +916,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                               SizedBox(height: 10),
                                               Column(
                                                 children: [
-                                                  Text("---- / -- / -- --:--",
+                                                  Text("--/--/---- --:--",
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 14,
@@ -981,7 +980,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                               SizedBox(height: 10),
                                               Column(
                                                 children: [
-                                                  Text("---- / -- / -- --:--",
+                                                  Text("--/--/---- --:--",
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 14,

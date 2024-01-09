@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:app_presensi_smantegaldlimo/partials/partial_page_home.dart';
+import 'package:app_presensi_smantegaldlimo/partials/partial_page_ijin.dart';
 import 'package:app_presensi_smantegaldlimo/partials/partial_page_riwayat_absen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class PageHome extends StatefulWidget {
 class _PageHomeState extends State<PageHome> {
   int _pageIndex = 1;
   final pages = [
-    Page1(),
+    PartPageIjin(),
     PartPageHome(),
     PartPageRiwayatAbsensi(),
   ];
@@ -36,7 +37,7 @@ class _PageHomeState extends State<PageHome> {
       bottomNavigationBar: CurvedNavigationBar(
         index: _pageIndex,
         items: const <Widget>[
-          Icon(CupertinoIcons.map_pin_ellipse, size: 30, color: Color.fromARGB(255, 250, 250, 252)),
+          Icon(CupertinoIcons.doc_text, size: 30, color: Color.fromARGB(255, 250, 250, 252)),
           Icon(CupertinoIcons.home,size: 30,color: Color.fromARGB(255, 250, 250, 252)),
           Icon(CupertinoIcons.calendar,size: 30,color: Color.fromARGB(255, 250, 250, 252)),
         ],
@@ -54,23 +55,5 @@ class _PageHomeState extends State<PageHome> {
       ),
       body: pages[_pageIndex],
     );
-  }
-}
-
-class Page1 extends StatelessWidget {
-  const Page1({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class Page2 extends StatelessWidget {
-  const Page2({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

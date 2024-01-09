@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_interpolation_to_compose_strings, non_constant_identifier_names, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_interpolation_to_compose_strings, non_constant_identifier_names, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations
 
 import 'package:app_presensi_smantegaldlimo/models/data_absen.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
@@ -144,7 +144,7 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "Username",
+                                                  "User",
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 10,
@@ -152,7 +152,7 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
                                                 ),
                                                 Text(
                                                   snapshot.data![index].username
-                                                      .toString(),
+                                                      .toString().toUpperCase(),
                                                   style: TextStyle(
                                                       color: Colors.black),
                                                 ),
@@ -238,6 +238,34 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
                                             ),
                                           ],
                                         ),
+                                        SizedBox(height: 10),
+                                        Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Text("Late",style: TextStyle(fontSize: 10)),
+                                                    Text("${snapshot.data![index].lateS.toString()}")
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text("Early",style: TextStyle(fontSize: 10)),
+                                                    Text("${snapshot.data![index].early.toString()}")
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text("OverTime",style: TextStyle(fontSize: 10)),
+                                                    Text("${snapshot.data![index].overtime.toString()}")
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
