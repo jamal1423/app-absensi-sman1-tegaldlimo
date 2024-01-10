@@ -32,6 +32,7 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
   String username = "";
 
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy H:m:s');
+  final DateFormat formatterDate2 = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
@@ -125,150 +126,281 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
                                     child: Text("Data tidak ditemukan"),
                                   )
                                   :
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(12),
-                                        boxShadow: [
-                                          BoxShadow(blurRadius: 1.5)
-                                        ]),
-                                    padding: EdgeInsets.all(12),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "User",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 10,
+                                    snapshot.data![index].ijin.toString() == 'YES'
+                                    ?
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(blurRadius: 1.5)
+                                          ]),
+                                      padding: EdgeInsets.all(12),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "User",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  snapshot.data![index].username
-                                                      .toString().toUpperCase(),
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  "Lokasi",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 10,
+                                                  Text(
+                                                    snapshot.data![index].namaPegawai
+                                                        .toString().toUpperCase(),
+                                                    style: TextStyle(
+                                                        color: Colors.black),
                                                   ),
-                                                ),
-                                                Text(
-                                                  snapshot.data![index].lokasi
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 5),
-                                        Divider(
-                                          height: 5,
-                                          color: Colors.black,
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Clock-In",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 10,
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "Status Ijin",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(formatterDate.format(DateTime.parse('${snapshot.data![index].tgl_c_in}')).toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  "Clock-Out",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  snapshot.data![index].c_out.toString() == ""
+                                                  snapshot.data![index].statusIjin.toString() == 'YES'
                                                   ?
-                                                    "-"
+                                                  Text("APPROVED",
+                                                    style: TextStyle(
+                                                        color: Colors.green, fontWeight: FontWeight.bold),
+                                                  )
                                                   :
-                                                  formatterDate.format(DateTime.parse('${snapshot.data![index].tgl_c_out}')).toString(),
-                                                  style: TextStyle(
-                                                      color: snapshot.data![index].c_out.toString() == ""
-                                                      ?
-                                                      Colors.red
-                                                      :
-                                                      Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-                                        Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Text("Late",style: TextStyle(fontSize: 10)),
-                                                    Text("${snapshot.data![index].lateS.toString()}")
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text("Early",style: TextStyle(fontSize: 10)),
-                                                    Text("${snapshot.data![index].early.toString()}")
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text("OverTime",style: TextStyle(fontSize: 10)),
-                                                    Text("${snapshot.data![index].overtime.toString()}")
-                                                  ],
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                                  Text("PENDING",
+                                                    style: TextStyle(
+                                                        color: Colors.red, fontWeight: FontWeight.bold),
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Divider(
+                                            height: 5,
+                                            color: Colors.black,
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Tgl. Ijin Awal",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  Text(formatterDate2.format(DateTime.parse('${snapshot.data![index].tglIjinAwal}')).toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "Tgl. Ijin Akhir",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  Text(formatterDate2.format(DateTime.parse('${snapshot.data![index].tglIjinAkhir}')).toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Text("Keterangan Ijin",style: TextStyle(fontSize: 10)),
+                                                      Text("${snapshot.data![index].ketIjin.toString()}")
+                                                    ],
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                    :
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(blurRadius: 1.5)
+                                          ]),
+                                      padding: EdgeInsets.all(12),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "User",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    snapshot.data![index].namaPegawai
+                                                        .toString().toUpperCase(),
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "Lokasi",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    snapshot.data![index].namaLokasi
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Divider(
+                                            height: 5,
+                                            color: Colors.black,
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Clock-In",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  Text(formatterDate.format(DateTime.parse('${snapshot.data![index].tgl_c_in}')).toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "Clock-Out",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    snapshot.data![index].c_out.toString() == ""
+                                                    ?
+                                                      "-"
+                                                    :
+                                                    formatterDate.format(DateTime.parse('${snapshot.data![index].tgl_c_out}')).toString(),
+                                                    style: TextStyle(
+                                                        color: snapshot.data![index].c_out.toString() == ""
+                                                        ?
+                                                        Colors.red
+                                                        :
+                                                        Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Text("Late",style: TextStyle(fontSize: 10)),
+                                                      Text("${snapshot.data![index].lateS.toString()}")
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Text("Early",style: TextStyle(fontSize: 10)),
+                                                      Text("${snapshot.data![index].early.toString()}")
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Text("OverTime",style: TextStyle(fontSize: 10)),
+                                                      Text("${snapshot.data![index].overtime.toString()}")
+                                                    ],
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
                                   SizedBox(height: 10)
                                 ],
                               ),

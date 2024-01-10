@@ -396,6 +396,7 @@ class _PartPageHomeState extends State<PartPageHome> {
           dismissOnTouchOutside: false,
           dialogType: DialogType.error,
           animType: AnimType.rightSlide,
+          btnOkColor: Colors.red,
           title: 'Failed',
           desc: 'Absen gagal, silahkan ulangi proses.',
           btnOkOnPress: () {},
@@ -407,6 +408,7 @@ class _PartPageHomeState extends State<PartPageHome> {
         dismissOnTouchOutside: false,
         dialogType: DialogType.error,
         animType: AnimType.rightSlide,
+        btnOkColor: Colors.red,
         title: 'Failed',
         desc: 'Absen gagal, silahkan ulangi proses.',
         btnOkOnPress: () {},
@@ -692,15 +694,26 @@ class _PartPageHomeState extends State<PartPageHome> {
                                       InkWell(
                                         onTap: () {
                                           distancemeter < radius!
-                                              ? snapshot.data!.c_in == 'YES'
-                                                  ? null
-                                                  : getData()
-                                              : ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                  SnackBar(
-                                                      content: Text(
-                                                          "Sedang diluar area absen...")),
-                                                );
+                                          ? 
+                                            snapshot.data!.c_in == 'YES'
+                                            ? 
+                                            null
+                                            : 
+                                              snapshot.data!.ijin == 'YES'
+                                              ?
+                                              ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                                SnackBar(content: Text("Tidak bisa absen, status Anda sedang ijin...")),
+                                              )    
+                                              :
+                                              getData()
+                                          : 
+                                          ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                            SnackBar(
+                                                content: Text(
+                                                    "Sedang diluar area absen...")),
+                                          );
                                         },
                                         child: Container(
                                           width: screenSize.width / 2.5,
@@ -779,15 +792,26 @@ class _PartPageHomeState extends State<PartPageHome> {
                                       InkWell(
                                         onTap: () {
                                           distancemeter < radius!
-                                              ? snapshot.data!.c_out == 'YES'
-                                                  ? null
-                                                  : getData()
-                                              : ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                  SnackBar(
-                                                      content: Text(
-                                                          "Sedang diluar area absen...")),
-                                                );
+                                          ? 
+                                          snapshot.data!.c_out == 'YES'
+                                          ? 
+                                          null
+                                          : 
+                                            snapshot.data!.ijin == 'YES'
+                                            ?
+                                            ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                              SnackBar(content: Text("Tidak bisa absen, status Anda sedang ijin...")),
+                                            )    
+                                            :
+                                            getData()
+                                          : 
+                                          ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                            SnackBar(
+                                                content: Text(
+                                                    "Sedang diluar area absen...")),
+                                          );
                                         },
                                         child: Container(
                                           width: screenSize.width / 2.5,
