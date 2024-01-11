@@ -100,11 +100,21 @@ class _PartPageHomeState extends State<PartPageHome> {
     }
 
     if (!mounted) return;
+    // _developerMode==false
+    // ?
+    // null
+    // :
+    // notifFakeGps();
 
     setState(() {
       _jailbroken = jailbroken;
       _developerMode = developerMode;
-      notifFakeGps();
+
+      _developerMode == null
+          ? "Unknown"
+          : _developerMode!
+              ? notifFakeGps()
+              : "NO";
     });
   }
 
@@ -174,21 +184,19 @@ class _PartPageHomeState extends State<PartPageHome> {
   // }
 
   notifFakeGps() {
-    _developerMode == null
-        ? null
-        : AwesomeDialog(
-            context: context,
-            dismissOnTouchOutside: false,
-            dialogType: DialogType.warning,
-            animType: AnimType.rightSlide,
-            btnOkColor: Colors.orange,
-            title: 'Warning',
-            desc:
-                'Terdeteksi FAKE GPS / Developer Mode On, dimohon untuk mematikan fitur tersebut.\n Press OK untuk keluar aplikasi.',
-            btnOkOnPress: () {
-              exit(0);
-            },
-          ).show();
+    AwesomeDialog(
+      context: context,
+      dismissOnTouchOutside: false,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      btnOkColor: Colors.orange,
+      title: 'Warning',
+      desc:
+          'Terdeteksi FAKE GPS / Developer Mode On, dimohon untuk mematikan fitur tersebut.\n Press OK untuk keluar aplikasi.',
+      btnOkOnPress: () {
+        exit(0);
+      },
+    ).show();
   }
 
   notifOutArea() {
