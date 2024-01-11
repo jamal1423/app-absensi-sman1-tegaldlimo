@@ -110,6 +110,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_jailbreak_detection:
+    dependency: "direct main"
+    description:
+      name: flutter_jailbreak_detection
+      sha256: "67ff11ea41965152d24db7104da1f9b343f94ada64c2a9e309ec4d753a12d281"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.10.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -336,30 +344,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  location:
-    dependency: "direct main"
-    description:
-      name: location
-      sha256: "06be54f682c9073cbfec3899eb9bc8ed90faa0e17735c9d9fa7fe426f5be1dd1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.3"
-  location_platform_interface:
-    dependency: transitive
-    description:
-      name: location_platform_interface
-      sha256: "8aa1d34eeecc979d7c9fe372931d84f6d2ebbd52226a54fe1620de6fdc0753b1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
-  location_web:
-    dependency: transitive
-    description:
-      name: location_web
-      sha256: ec484c66e8a4ff1ee5d044c203f4b6b71e3a0556a97b739a5bc9616de672412b
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.0"
   matcher:
     dependency: transitive
     description:
@@ -496,14 +480,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.8"
-  safe_device:
-    dependency: "direct main"
-    description:
-      name: safe_device
-      sha256: "7a7e49c6cd0a33798ae604657b9876aadfc1678c9be66a829b36a987c8e4bfd1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.4"
   sanitize_html:
     dependency: transitive
     description:
@@ -645,14 +621,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
-  trust_location:
-    dependency: transitive
-    description:
-      name: trust_location
-      sha256: "2457f4bcd9ef8423fd12d8ae1701040ecef37a488e4a46bfa50bad26d8cf7d80"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.13"
   typed_data:
     dependency: transitive
     description:

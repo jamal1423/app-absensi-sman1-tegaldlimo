@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_import
 
 import 'dart:convert';
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:location/location.dart' as locationv2;
+// import 'package:location/location.dart' as locationv2;
 
 class PageLogin extends StatefulWidget {
   const PageLogin({super.key});
@@ -21,32 +21,32 @@ class _PageLoginState extends State<PageLogin> {
   var txtEditUsername = TextEditingController();
   var txtEditPwd = TextEditingController();
 
-  locationv2.Location lokasi = locationv2.Location();
+  // locationv2.Location lokasi = locationv2.Location();
 
   // request permission
-  Future<bool> requestPermission() async {
-    bool serviceEnabled;
-    locationv2.PermissionStatus permissionGranted;
-    serviceEnabled = await lokasi.serviceEnabled();
+  // Future<bool> requestPermission() async {
+  //   bool serviceEnabled;
+  //   locationv2.PermissionStatus permissionGranted;
+  //   serviceEnabled = await lokasi.serviceEnabled();
 
-    //ceck service
-    if (!serviceEnabled) {
-      serviceEnabled = await lokasi.requestService();
-      if (!serviceEnabled) {
-        return false;
-      }
-    }
+  //   //ceck service
+  //   if (!serviceEnabled) {
+  //     serviceEnabled = await lokasi.requestService();
+  //     if (!serviceEnabled) {
+  //       return false;
+  //     }
+  //   }
 
-    //ceck permission
-    permissionGranted = await lokasi.hasPermission();
-    if (permissionGranted == locationv2.PermissionStatus.denied) {
-      permissionGranted = await lokasi.requestPermission();
-      if (permissionGranted != locationv2.PermissionStatus.granted) {
-        return false;
-      }
-    }
-    return true;
-  }
+  //   //ceck permission
+  //   permissionGranted = await lokasi.hasPermission();
+  //   if (permissionGranted == locationv2.PermissionStatus.denied) {
+  //     permissionGranted = await lokasi.requestPermission();
+  //     if (permissionGranted != locationv2.PermissionStatus.granted) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   Widget inputUsername() {
     return TextFormField(

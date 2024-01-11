@@ -1,13 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, prefer_collection_literals, sort_child_properties_last, sized_box_for_whitespace, use_build_context_synchronously, prefer_if_null_operators, depend_on_referenced_packages, no_leading_underscores_for_local_identifiers, unnecessary_new, unused_local_variable, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, prefer_collection_literals, sort_child_properties_last, sized_box_for_whitespace, use_build_context_synchronously, prefer_if_null_operators, depend_on_referenced_packages, no_leading_underscores_for_local_identifiers, unnecessary_new, unused_local_variable, unnecessary_brace_in_string_interps, unnecessary_import
 import 'dart:convert';
+import 'dart:io';
 // import 'dart:io';
 import 'dart:math';
-// import 'package:app_patroli_satpam/models/data_user.dart';
-// import 'package:app_patroli_satpam/pages/page_home.dart';
-// import 'package:app_patroli_satpam/pages/page_login.dart';
-// import 'package:app_patroli_satpam/partials/partial_page_lokasi_scan.dart';
-// import 'package:app_patroli_satpam/partials/partial_page_master_shift.dart';
-// import 'package:app_patroli_satpam/utils/util_card_home.dart';
 // import 'package:app_presensi_smantegaldlimo/models/data_cek_lokasi.dart';
 import 'package:app_presensi_smantegaldlimo/models/data_cek_absen.dart';
 import 'package:app_presensi_smantegaldlimo/models/data_mt_shift.dart';
@@ -22,8 +17,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:safe_device/safe_device.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:safe_device/safe_device.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter/foundation.dart' show kIsWeb;
@@ -31,6 +26,7 @@ import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 
 class PartPageHome extends StatefulWidget {
   const PartPageHome({super.key});
@@ -50,6 +46,9 @@ class _PartPageHomeState extends State<PartPageHome> {
   LatLng? _currentPosition;
   LatLng? initialLocation;
   LatLng staticLocation = LatLng(-8.495754591841902, 114.28139647893876);
+
+  bool? _jailbroken;
+  bool? _developerMode;
 
   final DateFormat formatterDate = DateFormat('dd-MM-yyyy H:m:s');
 
@@ -88,6 +87,27 @@ class _PartPageHomeState extends State<PartPageHome> {
 
   late Future<DataCekAbsen> futureDataAbsen;
 
+  Future<void> initPlatformState() async {
+    bool jailbroken;
+    bool developerMode;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      jailbroken = await FlutterJailbreakDetection.jailbroken;
+      developerMode = await FlutterJailbreakDetection.developerMode;
+    } on PlatformException {
+      jailbroken = true;
+      developerMode = true;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _jailbroken = jailbroken;
+      _developerMode = developerMode;
+      notifFakeGps();
+    });
+  }
+
   void getLocation() async {
     LocationPermission permission;
     permission = await Geolocator.requestPermission();
@@ -105,7 +125,7 @@ class _PartPageHomeState extends State<PartPageHome> {
       // _positionNow = LatLng(lat, long);
       // _isLoading = false;
       getPlace(latt, longg);
-      initPlatformState();
+      // initPlatformState();
     });
   }
 
@@ -135,47 +155,40 @@ class _PartPageHomeState extends State<PartPageHome> {
     );
   }
 
-  Future<void> initPlatformState() async {
-    await Permission.location.request();
-    if (await Permission.location.isPermanentlyDenied) {
-      openAppSettings();
-    }
+  // Future<void> initPlatformState() async {
+  //   await Permission.location.request();
+  //   if (await Permission.location.isPermanentlyDenied) {
+  //     openAppSettings();
+  //   }
 
-    if (!mounted) return;
-    try {
-      canMockLocation = await SafeDevice.canMockLocation;
-    } catch (error) {
-      print(error);
-    }
+  //   if (!mounted) return;
+  //   try {
+  //     canMockLocation = await SafeDevice.canMockLocation;
+  //   } catch (error) {
+  //     print(error);
+  //   }
 
-    setState(() {
-      canMockLocation = canMockLocation;
-    });
-  }
+  //   setState(() {
+  //     canMockLocation = canMockLocation;
+  //   });
+  // }
 
   notifFakeGps() {
-    Alert(
-      context: context,
-      style: const AlertStyle(
-        isCloseButton: false,
-        descStyle: TextStyle(fontSize: 14.0),
-      ),
-      type: AlertType.warning,
-      title: "WARNING",
-      desc: "Terdeteksi FAKE GPS, dimohon untuk mematikan aplikasi tersebut.",
-      buttons: [
-        DialogButton(
-          child: Text(
-            "Ok",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          color: Colors.orange,
-        ),
-      ],
-    ).show();
+    _developerMode == null
+        ? null
+        : AwesomeDialog(
+            context: context,
+            dismissOnTouchOutside: false,
+            dialogType: DialogType.warning,
+            animType: AnimType.rightSlide,
+            btnOkColor: Colors.orange,
+            title: 'Warning',
+            desc:
+                'Terdeteksi FAKE GPS / Developer Mode On, dimohon untuk mematikan fitur tersebut.\n Press OK untuk keluar aplikasi.',
+            btnOkOnPress: () {
+              exit(0);
+            },
+          ).show();
   }
 
   notifOutArea() {
@@ -272,17 +285,6 @@ class _PartPageHomeState extends State<PartPageHome> {
     });
   }
 
-  // 'username' => 'required',
-  //               'latitude' => 'required',
-  //               'longitude' => 'required',
-  //               'lokasi' => 'required',
-  //               'ijin' => '',
-  //               'ket_ijin' => '',
-  //               'tgl_ijin_awal' => '',
-  //               'tgl_ijin_akhir' => '',
-  //               'status_ijin' => '',
-  //               'doc_ijin' => '',
-
   getData() async {
     //Codec<String, String> stringToBase64 = utf8.fuse(base64);
     //String encodedNis = stringToBase64.encode(nis);
@@ -316,7 +318,8 @@ class _PartPageHomeState extends State<PartPageHome> {
           animType: AnimType.rightSlide,
           btnOkColor: Colors.blue,
           title: 'Konfirmasi',
-          desc: 'Yakin sudah sesuai jadwal absen?\nPress OK untuk melanjutkan absen.',
+          desc:
+              'Yakin sudah sesuai jadwal absen?\nPress OK untuk melanjutkan absen.',
           btnOkOnPress: () {
             postDataAbsen(_usernamePost, _latitPost, _longitPost, _lokasiPost);
           },
@@ -371,7 +374,7 @@ class _PartPageHomeState extends State<PartPageHome> {
             );
           },
         ).show();
-      } else if(resp['status'] == 'noAccess'){
+      } else if (resp['status'] == 'noAccess') {
         AwesomeDialog(
           context: context,
           dismissOnTouchOutside: false,
@@ -426,7 +429,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     futureDataUser = fetchDatauser();
     futureMasterShift = fetchMasterShift();
     super.initState();
-    // initPlatformState();
+    initPlatformState();
     //getPlace();
     addCustomIcon();
     dtNow;
@@ -547,8 +550,9 @@ class _PartPageHomeState extends State<PartPageHome> {
                             Text(
                               "${snapshot.data!.nama_pegawai}",
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,),
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
                             ),
                           ],
                         );
@@ -694,26 +698,23 @@ class _PartPageHomeState extends State<PartPageHome> {
                                       InkWell(
                                         onTap: () {
                                           distancemeter < radius!
-                                          ? 
-                                            snapshot.data!.c_in == 'YES'
-                                            ? 
-                                            null
-                                            : 
-                                              snapshot.data!.ijin == 'YES'
-                                              ?
-                                              ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                                SnackBar(content: Text("Tidak bisa absen, status Anda sedang ijin...")),
-                                              )    
-                                              :
-                                              getData()
-                                          : 
-                                          ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                            SnackBar(
-                                                content: Text(
-                                                    "Sedang diluar area absen...")),
-                                          );
+                                              ? snapshot.data!.c_in == 'YES'
+                                                  ? null
+                                                  : snapshot.data!.ijin == 'YES'
+                                                      ? ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  "Tidak bisa absen, status Anda sedang ijin...")),
+                                                        )
+                                                      : getData()
+                                              : ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          "Sedang diluar area absen...")),
+                                                );
                                         },
                                         child: Container(
                                           width: screenSize.width / 2.5,
@@ -769,8 +770,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                     )
                                                   : Column(
                                                       children: [
-                                                        Text(
-                                                            "--/--/---- --:--",
+                                                        Text("--/--/---- --:--",
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
@@ -792,26 +792,23 @@ class _PartPageHomeState extends State<PartPageHome> {
                                       InkWell(
                                         onTap: () {
                                           distancemeter < radius!
-                                          ? 
-                                          snapshot.data!.c_out == 'YES'
-                                          ? 
-                                          null
-                                          : 
-                                            snapshot.data!.ijin == 'YES'
-                                            ?
-                                            ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                              SnackBar(content: Text("Tidak bisa absen, status Anda sedang ijin...")),
-                                            )    
-                                            :
-                                            getData()
-                                          : 
-                                          ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                            SnackBar(
-                                                content: Text(
-                                                    "Sedang diluar area absen...")),
-                                          );
+                                              ? snapshot.data!.c_out == 'YES'
+                                                  ? null
+                                                  : snapshot.data!.ijin == 'YES'
+                                                      ? ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  "Tidak bisa absen, status Anda sedang ijin...")),
+                                                        )
+                                                      : getData()
+                                              : ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          "Sedang diluar area absen...")),
+                                                );
                                         },
                                         child: Container(
                                           width: screenSize.width / 2.5,
@@ -867,8 +864,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                     )
                                                   : Column(
                                                       children: [
-                                                        Text(
-                                                            "--/--/---- --:--",
+                                                        Text("--/--/---- --:--",
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
@@ -1031,7 +1027,8 @@ class _PartPageHomeState extends State<PartPageHome> {
                     Column(
                       children: [
                         Center(
-                          child: Text(formatterDate2.format(DateTime.parse("${dtNow}")),
+                          child: Text(
+                              formatterDate2.format(DateTime.parse("${dtNow}")),
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
                         )

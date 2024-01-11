@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'dart:async';
 import 'package:app_presensi_smantegaldlimo/pages/page_login.dart';
@@ -61,12 +61,16 @@ class _MyHomePageState extends State<MyHomePage> {
   
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Container(
       color: Colors.white,
-      child: Image(
-        image: AssetImage("assets/loading.gif"),
-        width: 10,
-        height: 10,
+      child: Center(
+        child: Image(
+          image: AssetImage("assets/smanteg.png"),
+          width: screenSize.width / 2,
+          height: 100,
+          // fit: BoxFit.fitWidth,
+        ),
       ),
     );
   }
