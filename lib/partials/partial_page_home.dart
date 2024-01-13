@@ -27,6 +27,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class PartPageHome extends StatefulWidget {
   const PartPageHome({super.key});
@@ -57,6 +58,11 @@ class _PartPageHomeState extends State<PartPageHome> {
   String username = "";
   late Future<DataUser> futureDataUser;
   late Future<DataMtShift> futureMasterShift;
+
+  //cek koneksi internet
+  Map _source = {ConnectivityResult.none: false};
+  final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
+  String string = '';
 
   String? kodeLok;
   String? namaLok;
@@ -427,10 +433,63 @@ class _PartPageHomeState extends State<PartPageHome> {
     }
   }
 
+  cekKoneksiInternet(){
+    _networkConnectivity.initialise();
+    _networkConnectivity.myStream.listen((source) {
+      _source = source;
+      print('source $_source');
+      // 1.
+      switch (_source.keys.toList()[0]) {
+        case ConnectivityResult.mobile:
+          string =
+              _source.values.toList()[0] ? 'Online' : 'Offline';
+          break;
+        case ConnectivityResult.wifi:
+          string =
+              _source.values.toList()[0] ? 'Online' : 'Offline';
+          break;
+        case ConnectivityResult.none:
+        default:
+          string = 'Offline';
+      }
+      // 2.
+      setState(() {});
+      // 3.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            string,
+            style: TextStyle(fontSize: 14),
+          ),
+        ),
+      );
+      // AwesomeDialog(
+      //   context: context,
+      //   dismissOnTouchOutside: true,
+      //   dialogType: DialogType.warning,
+      //   animType: AnimType.rightSlide,
+      //   btnOkColor: Colors.orange,
+      //   title: 'Wanring',
+      //   desc:
+      //       'Perangkat offline, periksa jaringan internet Anda.\nPress OK untuk muat ulang aplikasi.',
+      //   btnOkOnPress: () {
+      //     Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (BuildContext context) => PageHome(),
+      //       ),
+      //       (route) => false,
+      //     );
+      //   },
+      // ).show();
+    });
+  }
+
   var dtNow = new DateTime.now();
 
   @override
   void initState() {
+    cekKoneksiInternet();
     futureDataAbsen = fetchDataCekAbsen();
     getPref();
     getLocation();
@@ -445,6 +504,7 @@ class _PartPageHomeState extends State<PartPageHome> {
 
   @override
   dispose() {
+    _networkConnectivity.disposeStream();
     super.dispose();
   }
 
@@ -810,7 +870,18 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                               content: Text(
                                                                   "Tidak bisa absen, status Anda sedang ijin...")),
                                                         )
-                                                      : getData()
+                                                      : 
+                                                        nowAbsen
+                                                        ? 
+                                                        getData()
+                                                        :
+                                                        ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  "Tidak bisa absen, Anda belum clock-in...")),
+                                                        )
                                               : ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                   SnackBar(
@@ -1237,4 +1308,34 @@ class _PartPageHomeState extends State<PartPageHome> {
       throw Exception('Failed to load User.');
     }
   }
+}
+
+
+//cek koneksi internet
+class NetworkConnectivity {
+  NetworkConnectivity._();
+  static final _instance = NetworkConnectivity._();
+  static NetworkConnectivity get instance => _instance;
+  final _networkConnectivity = Connectivity();
+  final _controller = StreamController.broadcast();
+  Stream get myStream => _controller.stream;
+  void initialise() async {
+    ConnectivityResult result = await _networkConnectivity.checkConnectivity();
+    _checkStatus(result);
+    _networkConnectivity.onConnectivityChanged.listen((result) {
+      print(result);
+      _checkStatus(result);
+    });
+  }
+  void _checkStatus(ConnectivityResult result) async {
+    bool isOnline = false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      isOnline = result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      isOnline = false;
+    }
+    _controller.sink.add({result: isOnline});
+  }
+  void disposeStream() => _controller.close();
 }
