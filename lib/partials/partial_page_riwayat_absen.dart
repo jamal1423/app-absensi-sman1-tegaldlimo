@@ -172,7 +172,7 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
                                                       fontSize: 10,
                                                     ),
                                                   ),
-                                                  snapshot.data![index].statusIjin.toString() == 'YES'
+                                                  snapshot.data![index].statusIjin.toString() == 'approved'
                                                   ?
                                                   Text("APPROVED",
                                                     style: TextStyle(

@@ -9,6 +9,7 @@ import 'package:app_presensi_smantegaldlimo/models/data_mt_shift.dart';
 import 'package:app_presensi_smantegaldlimo/models/data_user.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_login.dart';
+import 'package:app_presensi_smantegaldlimo/pages/page_offline.dart';
 // import 'package:app_presensi_smantegaldlimo/utils/util_card_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -125,6 +126,7 @@ class _PartPageHomeState extends State<PartPageHome> {
   }
 
   void getLocation() async {
+    cekKoneksiInternet();
     LocationPermission permission;
     permission = await Geolocator.requestPermission();
 
@@ -231,6 +233,7 @@ class _PartPageHomeState extends State<PartPageHome> {
   }
 
   getPref() async {
+    cekKoneksiInternet();
     SharedPreferences pref = await SharedPreferences.getInstance();
     var islogin = pref.getBool("is_login");
     if (islogin != null && islogin == true) {
@@ -293,7 +296,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     // String postalCode = placeMark.postalCode.toString();
     // String country = placeMark.country.toString();
     String address = "$subLocality, $locality, $subAdministrativeArea";
-
+    cekKoneksiInternet();
     setState(() {
       _address = address;
     });
@@ -433,7 +436,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     }
   }
 
-  cekKoneksiInternet(){
+  cekKoneksiInternet() {
     _networkConnectivity.initialise();
     _networkConnectivity.myStream.listen((source) {
       _source = source;
@@ -441,47 +444,32 @@ class _PartPageHomeState extends State<PartPageHome> {
       // 1.
       switch (_source.keys.toList()[0]) {
         case ConnectivityResult.mobile:
-          string =
-              _source.values.toList()[0] ? 'Online' : 'Offline';
+          string = _source.values.toList()[0] ? 'Online' : 'Offline';
           break;
         case ConnectivityResult.wifi:
-          string =
-              _source.values.toList()[0] ? 'Online' : 'Offline';
+          string = _source.values.toList()[0] ? 'Online' : 'Offline';
           break;
         case ConnectivityResult.none:
         default:
           string = 'Offline';
       }
       // 2.
-      setState(() {});
+      // setState(() {});
       // 3.
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            string,
-            style: TextStyle(fontSize: 14),
-          ),
-        ),
-      );
-      // AwesomeDialog(
-      //   context: context,
-      //   dismissOnTouchOutside: true,
-      //   dialogType: DialogType.warning,
-      //   animType: AnimType.rightSlide,
-      //   btnOkColor: Colors.orange,
-      //   title: 'Wanring',
-      //   desc:
-      //       'Perangkat offline, periksa jaringan internet Anda.\nPress OK untuk muat ulang aplikasi.',
-      //   btnOkOnPress: () {
-      //     Navigator.pushAndRemoveUntil(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (BuildContext context) => PageHome(),
-      //       ),
-      //       (route) => false,
-      //     );
-      //   },
-      // ).show();
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       string,
+      //       style: TextStyle(fontSize: 14),
+      //     ),
+      //   ),
+      // );
+      if (string == 'Offline') {
+        Timer(
+          const Duration(seconds: 4),
+          () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const PageOffline())));
+      }
     });
   }
 
@@ -491,15 +479,15 @@ class _PartPageHomeState extends State<PartPageHome> {
   void initState() {
     cekKoneksiInternet();
     futureDataAbsen = fetchDataCekAbsen();
-    getPref();
-    getLocation();
     futureDataUser = fetchDatauser();
     futureMasterShift = fetchMasterShift();
-    super.initState();
+    getPref();
+    getLocation();
     initPlatformState();
     //getPlace();
     addCustomIcon();
     dtNow;
+    super.initState();
   }
 
   @override
@@ -660,6 +648,13 @@ class _PartPageHomeState extends State<PartPageHome> {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Ke Menu Profile'),
               ));
+              // Navigator.pushAndRemoveUntil(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (BuildContext context) => PageOffline(),
+              //     ),
+              //     (route) => false,
+              //   );
             } else if (value == 1) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Ke Menu Setting'),
@@ -870,18 +865,15 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                               content: Text(
                                                                   "Tidak bisa absen, status Anda sedang ijin...")),
                                                         )
-                                                      : 
-                                                        nowAbsen
-                                                        ? 
-                                                        getData()
-                                                        :
-                                                        ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                          SnackBar(
-                                                              content: Text(
-                                                                  "Tidak bisa absen, Anda belum clock-in...")),
-                                                        )
+                                                      : nowAbsen
+                                                          ? getData()
+                                                          : ScaffoldMessenger
+                                                                  .of(context)
+                                                              .showSnackBar(
+                                                              SnackBar(
+                                                                  content: Text(
+                                                                      "Tidak bisa absen, Anda belum clock-in...")),
+                                                            )
                                               : ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                   SnackBar(
@@ -1310,7 +1302,6 @@ class _PartPageHomeState extends State<PartPageHome> {
   }
 }
 
-
 //cek koneksi internet
 class NetworkConnectivity {
   NetworkConnectivity._();
@@ -1327,6 +1318,7 @@ class NetworkConnectivity {
       _checkStatus(result);
     });
   }
+
   void _checkStatus(ConnectivityResult result) async {
     bool isOnline = false;
     try {
@@ -1337,5 +1329,6 @@ class NetworkConnectivity {
     }
     _controller.sink.add({result: isOnline});
   }
+
   void disposeStream() => _controller.close();
 }
