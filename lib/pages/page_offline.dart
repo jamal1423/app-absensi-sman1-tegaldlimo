@@ -35,7 +35,7 @@ class _PageOfflineState extends State<PageOffline> {
                 width: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: Colors.blue
+                  color: Color.fromARGB(255, 168, 17, 156)
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),

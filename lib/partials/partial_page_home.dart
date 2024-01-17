@@ -483,7 +483,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     futureMasterShift = fetchMasterShift();
     getPref();
     getLocation();
-    // initPlatformState();
+    initPlatformState();
     //getPlace();
     addCustomIcon();
     dtNow;
