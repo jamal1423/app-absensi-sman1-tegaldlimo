@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_import
+// ignore_for_file: use_build_context_synchronously, unnecessary_import, prefer_const_constructors
 
 import 'dart:convert';
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
@@ -65,6 +65,7 @@ class _PageLoginState extends State<PageLogin> {
           txtEditUsername.text = val!;
         },
         decoration: InputDecoration(
+          border: const OutlineInputBorder(),
           hintText: 'Masukkan Username',
           hintStyle: const TextStyle(color: Colors.white),
           labelText: "Masukkan Username",
@@ -109,6 +110,7 @@ class _PageLoginState extends State<PageLogin> {
         txtEditPwd.text = val!;
       },
       decoration: InputDecoration(
+        border: const OutlineInputBorder(),
         hintText: 'Masukkan Password',
         hintStyle: const TextStyle(color: Colors.white),
         labelText: "Masukkan Password",
@@ -264,27 +266,38 @@ class _PageLoginState extends State<PageLogin> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 110, 129, 149),
       body: Container(
         margin: const EdgeInsets.all(0),
         decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color.fromARGB(255, 110, 129, 149), Color.fromARGB(255, 207, 210, 216)],
-        )),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[
+              Color.fromARGB(255, 154, 187, 214),
+              Color.fromARGB(255, 192, 123, 186),
+            ],
+          ),
+        ),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 60.0, bottom: 0),
                 child: Center(
                   child: SizedBox(
                     width: 200,
                     height: 80,
-                    child: Icon(Icons.person_2_outlined, size: 50, color: Colors.white,),
+                    child: Image(
+                      image: AssetImage("assets/smanteg.png"),
+                      width: screenSize.width / 2,
+                      height: 100,
+                      // fit: BoxFit.fitWidth,
+                    ),
+                    //Icon(Icons.person_2_outlined, size: 50, color: Colors.white,),
                   ),
                 ),
               ),
@@ -315,7 +328,7 @@ class _PageLoginState extends State<PageLogin> {
                 padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 16, 36, 151),
+                    backgroundColor: const Color.fromARGB(255, 168, 17, 156),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(color: Colors.white60),

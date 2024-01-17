@@ -82,6 +82,33 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
     }
   }
 
+  logOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.remove("is_login");
+      preferences.remove("username");
+      preferences.remove("fullname");
+    });
+
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const PageLogin(),
+        ),
+        (route) => false,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+          "Berhasil logout",
+          style: TextStyle(fontSize: 16),
+        )),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -96,6 +123,43 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
           ),
         ),
         title: Text("Riwayat Absensi", style: TextStyle(color: Colors.black)),
+        actionsIconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          PopupMenuButton(itemBuilder: (context) {
+            return [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text("Keluar"),
+              ),
+              // const PopupMenuItem<int>(
+              //   value: 1,
+              //   child: Text("Settings"),
+              // ),
+              // const PopupMenuItem<int>(
+              //   value: 2,
+              //   child: Text("Logout"),
+              // ),
+            ];
+          }, onSelected: (value) {
+            if (value == 0) {
+              logOut();
+              // Navigator.pushAndRemoveUntil(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (BuildContext context) => PageOffline(),
+              //     ),
+              //     (route) => false,
+              //   );
+            } 
+            // else if (value == 1) {
+            //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //     content: Text('Ke Menu Setting'),
+            //   ));
+            // } else if (value == 2) {
+            //   logOut();
+            // }
+          }),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -412,7 +476,7 @@ class _PartPageRiwayatAbsensiState extends State<PartPageRiwayatAbsensi> {
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
                   }
-                  return const CircularProgressIndicator(color: Colors.blue);
+                  return const CircularProgressIndicator(color: Color.fromARGB(255, 168, 17, 156));
                 }),
           )
         ],

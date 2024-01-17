@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
+import 'package:app_presensi_smantegaldlimo/main.dart';
 import 'package:flutter/material.dart';
 
 class PageOffline extends StatefulWidget {
@@ -26,7 +26,7 @@ class _PageOfflineState extends State<PageOffline> {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => PageHome(),
+                    builder: (BuildContext context) => MyApp(),
                   ),
                   (route) => false,
                 );

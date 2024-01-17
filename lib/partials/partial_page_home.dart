@@ -483,7 +483,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     futureMasterShift = fetchMasterShift();
     getPref();
     getLocation();
-    initPlatformState();
+    // initPlatformState();
     //getPlace();
     addCustomIcon();
     dtNow;
@@ -616,7 +616,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                         return Text("${snapshot.error}");
                       }
                       return const CircularProgressIndicator(
-                        color: Color.fromARGB(255, 167, 168, 168),
+                        color: Color.fromARGB(255, 168, 17, 156),
                         strokeWidth: 2,
                       );
                     },
@@ -632,22 +632,20 @@ class _PartPageHomeState extends State<PartPageHome> {
             return [
               const PopupMenuItem<int>(
                 value: 0,
-                child: Text("Profile"),
+                child: Text("Keluar"),
               ),
-              const PopupMenuItem<int>(
-                value: 1,
-                child: Text("Settings"),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Text("Logout"),
-              ),
+              // const PopupMenuItem<int>(
+              //   value: 1,
+              //   child: Text("Settings"),
+              // ),
+              // const PopupMenuItem<int>(
+              //   value: 2,
+              //   child: Text("Logout"),
+              // ),
             ];
           }, onSelected: (value) {
             if (value == 0) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Ke Menu Profile'),
-              ));
+              logOut();
               // Navigator.pushAndRemoveUntil(
               //     context,
               //     MaterialPageRoute(
@@ -655,13 +653,14 @@ class _PartPageHomeState extends State<PartPageHome> {
               //     ),
               //     (route) => false,
               //   );
-            } else if (value == 1) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Ke Menu Setting'),
-              ));
-            } else if (value == 2) {
-              logOut();
-            }
+            } 
+            // else if (value == 1) {
+            //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //     content: Text('Ke Menu Setting'),
+            //   ));
+            // } else if (value == 2) {
+            //   logOut();
+            // }
           }),
         ],
       ),
@@ -672,7 +671,7 @@ class _PartPageHomeState extends State<PartPageHome> {
           child: Container(
             child: FloatingActionButton(
               mini: true,
-              backgroundColor: Color.fromARGB(255, 22, 45, 250),
+              backgroundColor: Color.fromARGB(255, 168, 17, 156),
               tooltip: 'Refresh Page',
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
@@ -704,11 +703,19 @@ class _PartPageHomeState extends State<PartPageHome> {
               child: Container(
                 height: screenSize.height / 2.4,
                 width: double.infinity,
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      Color.fromARGB(255, 154, 187, 214),
+                      Color.fromARGB(255, 192, 123, 186),
+                    ],
+                  ),
+                  // color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -724,10 +731,15 @@ class _PartPageHomeState extends State<PartPageHome> {
                     distancemeter >= 1000
                         ? Column(
                             children: [
+                              // Text(
+                              //   "Lokasi Anda\n$_address\nJarak $distanceToStringKiloMeter KM dari $namaLok",
+                              //   textAlign: TextAlign.center,
+                              //   style: TextStyle(color: Colors.black),
+                              // ),
                               Text(
-                                "Lokasi Anda\n$_address\nJarak $distanceToStringKiloMeter KM dari $namaLok",
+                                "Lokasi Anda $distanceToStringKiloMeter KM dari $namaLok",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black, fontSize: 16),
                               ),
                               distancemeter < radius!
                                   ? Text("(Didalam area absensi)")
@@ -736,10 +748,14 @@ class _PartPageHomeState extends State<PartPageHome> {
                           )
                         : Column(
                             children: [
+                              // Text(
+                              //     "Lokasi Anda\n$_address\nJarak $distanceToStringMeter Meter dari $namaLok",
+                              //     textAlign: TextAlign.center,
+                              //     style: TextStyle(color: Colors.black)),
                               Text(
-                                  "Lokasi Anda\n$_address\nJarak $distanceToStringMeter Meter dari $namaLok",
+                                  "Lokasi Anda $distanceToStringMeter Meter dari $namaLok",
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black)),
+                                  style: TextStyle(color: Colors.black, fontSize: 16)),
                               distancemeter < radius!
                                   ? Text("(Didalam area absensi)")
                                   : Text("(Diluar area absensi)")
@@ -780,73 +796,67 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                 );
                                         },
                                         child: Container(
-                                          width: screenSize.width / 2.5,
-                                          height: screenSize.height / 10,
+                                          // width: screenSize.width / 2.5,
+                                          // height: screenSize.height / 8,
                                           decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius.circular(50),
                                               color: Colors.green),
-                                          padding: const EdgeInsets.all(12),
+                                          padding: const EdgeInsets.all(20),
                                           child: Column(
                                             children: [
                                               Column(
                                                 children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.login_rounded,
-                                                        size: 25,
-                                                        color: Colors.white,
-                                                      ),
-                                                      SizedBox(width: 5),
-                                                      Text("Clock-In",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold))
-                                                    ],
-                                                  )
+                                                  Icon(
+                                                    Icons.fingerprint_rounded,
+                                                    size: 40,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text("Clock-In",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.white,
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight
+                                                                  .bold))
                                                 ],
                                               ),
-                                              SizedBox(height: 10),
-                                              snapshot.data!.c_in == 'YES'
-                                                  ? Column(
-                                                      children: [
-                                                        Text(
-                                                            formatterDate.format(
-                                                                DateTime.parse(
-                                                                    "${snapshot.data!.tgl_c_in}")),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold))
-                                                      ],
-                                                    )
-                                                  : Column(
-                                                      children: [
-                                                        Text("--/--/---- --:--",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold))
-                                                      ],
-                                                    )
+                                              
                                             ],
                                           ),
                                         ),
                                       ),
+                                      SizedBox(height: 5),
+                                      snapshot.data!.c_in == 'YES'
+                                          ? Column(
+                                              children: [
+                                                Text(
+                                                    formatterDate.format(
+                                                        DateTime.parse(
+                                                            "${snapshot.data!.tgl_c_in}")),
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .bold))
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Text("--/--/---- --:--",
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .bold))
+                                              ],
+                                            )
                                     ],
                                   ),
                                   SizedBox(width: 5),
@@ -882,73 +892,66 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                 );
                                         },
                                         child: Container(
-                                          width: screenSize.width / 2.5,
-                                          height: screenSize.height / 10,
+                                          // width: screenSize.width / 2.5,
+                                          // height: screenSize.height / 8,
                                           decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius.circular(50),
                                               color: Colors.red),
-                                          padding: const EdgeInsets.all(12),
+                                          padding: const EdgeInsets.all(20),
                                           child: Column(
                                             children: [
                                               Column(
                                                 children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.logout_rounded,
-                                                        size: 25,
-                                                        color: Colors.white,
-                                                      ),
-                                                      SizedBox(width: 5),
-                                                      Text("Clock-Out",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold))
-                                                    ],
-                                                  )
+                                                  Icon(
+                                                    Icons.fingerprint_rounded,
+                                                    size: 40,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text("Clock-Out",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.white,
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight
+                                                                  .bold))
                                                 ],
                                               ),
-                                              SizedBox(height: 10),
-                                              snapshot.data!.c_out == 'YES'
-                                                  ? Column(
-                                                      children: [
-                                                        Text(
-                                                            formatterDate.format(
-                                                                DateTime.parse(
-                                                                    "${snapshot.data!.tgl_c_out}")),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold))
-                                                      ],
-                                                    )
-                                                  : Column(
-                                                      children: [
-                                                        Text("--/--/---- --:--",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold))
-                                                      ],
-                                                    )
                                             ],
                                           ),
                                         ),
                                       ),
+                                      SizedBox(height: 5),
+                                      snapshot.data!.c_out == 'YES'
+                                          ? Column(
+                                              children: [
+                                                Text(
+                                                    formatterDate.format(
+                                                        DateTime.parse(
+                                                            "${snapshot.data!.tgl_c_out}")),
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .bold))
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Text("--/--/---- --:--",
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .black,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .bold))
+                                              ],
+                                            )
                                     ],
                                   ),
                                 ],
@@ -971,7 +974,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                         },
                                         child: Container(
                                           width: screenSize.width / 2.5,
-                                          height: screenSize.height / 10,
+                                          height: screenSize.height / 8,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -1010,7 +1013,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                   Text("--/--/---- --:--",
                                                       style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 14,
+                                                          fontSize: 12,
                                                           fontWeight:
                                                               FontWeight.bold))
                                                 ],
@@ -1035,7 +1038,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                         },
                                         child: Container(
                                           width: screenSize.width / 2.5,
-                                          height: screenSize.height / 10,
+                                          height: screenSize.height / 8,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -1074,7 +1077,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                   Text("--/--/---- --:--",
                                                       style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 14,
+                                                          fontSize: 12,
                                                           fontWeight:
                                                               FontWeight.bold))
                                                 ],
@@ -1089,7 +1092,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                               );
                             }
                             return const CircularProgressIndicator(
-                              color: Colors.blue,
+                              color: Color.fromARGB(255, 168, 17, 156),
                               strokeWidth: 2,
                             );
                           }),
@@ -1101,7 +1104,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                           child: Text(
                               formatterDate2.format(DateTime.parse("${dtNow}")),
                               style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -1122,7 +1125,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                         child: Container(
                                           child: Text("Jam Masuk",
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.bold)),
                                         ),
                                       ),
@@ -1132,8 +1135,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 163, 161, 161)),
+                                              color: Colors.white),
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.all(5),
@@ -1141,7 +1143,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                             child: Text(
                                                 "${snapshot.data!.jamMasukAwal.toString()} - ${snapshot.data!.jamMasuk.toString()}",
                                                 style: TextStyle(
-                                                    fontSize: 15,
+                                                    fontSize: 14,
                                                     fontWeight:
                                                         FontWeight.bold)),
                                           ),
@@ -1156,7 +1158,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                         child: Container(
                                           child: Text("Jam Pulang",
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.bold)),
                                         ),
                                       ),
@@ -1166,8 +1168,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 163, 161, 161)),
+                                              color: Colors.white),
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.all(5),
@@ -1175,7 +1176,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                                             child: Text(
                                                 "${snapshot.data!.jamPulang} - ${snapshot.data!.jamPulangAkhir}",
                                                 style: TextStyle(
-                                                    fontSize: 15,
+                                                    fontSize: 14,
                                                     fontWeight:
                                                         FontWeight.bold)),
                                           ),
@@ -1189,7 +1190,7 @@ class _PartPageHomeState extends State<PartPageHome> {
                               return Text("${snapshot.error}");
                             }
                             return const CircularProgressIndicator(
-                              color: Colors.blue,
+                              color: Color.fromARGB(255, 168, 17, 156),
                               strokeWidth: 2,
                             );
                           }),

@@ -395,29 +395,28 @@ class _PartPageIjinState extends State<PartPageIjin> {
             return [
               const PopupMenuItem<int>(
                 value: 0,
-                child: Text("Profile"),
+                child: Text("Keluar"),
               ),
-              const PopupMenuItem<int>(
-                value: 1,
-                child: Text("Settings"),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Text("Logout"),
-              ),
+              // const PopupMenuItem<int>(
+              //   value: 1,
+              //   child: Text("Settings"),
+              // ),
+              // const PopupMenuItem<int>(
+              //   value: 2,
+              //   child: Text("Logout"),
+              // ),
             ];
           }, onSelected: (value) {
             if (value == 0) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Ke Menu Profile'),
-              ));
-            } else if (value == 1) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Ke Menu Setting'),
-              ));
-            } else if (value == 2) {
               logOut();
-            }
+            } 
+            // else if (value == 1) {
+            //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //     content: Text('Ke Menu Setting'),
+            //   ));
+            // } else if (value == 2) {
+            //   logOut();
+            // }
           }),
         ],
       ),
@@ -443,7 +442,7 @@ class _PartPageIjinState extends State<PartPageIjin> {
                     const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                 child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 16, 36, 151),
+                        backgroundColor: const Color.fromARGB(255, 168, 17, 156),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: const BorderSide(color: Colors.white60),
