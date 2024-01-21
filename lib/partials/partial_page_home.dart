@@ -816,7 +816,7 @@ class _PartPageHomeState extends State<PartPageHome> {
         ),
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
