@@ -276,8 +276,9 @@ class _PageLoginState extends State<PageLogin> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              Color.fromARGB(255, 154, 187, 214),
-              Color.fromARGB(255, 192, 123, 186),
+            Colors.white,
+            Color.fromARGB(255, 211, 175, 187),
+            Color.fromARGB(255, 99, 129, 153),
             ],
           ),
         ),

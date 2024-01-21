@@ -110,7 +110,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     return Container(
-      color: Colors.white,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topRight,
+          colors: <Color>[
+            Colors.white,
+            Color.fromARGB(255, 211, 175, 187),
+            Color.fromARGB(255, 99, 129, 153),
+          ],
+        ),
+      ),
       child: Center(
         child: Image(
               image: AssetImage("assets/smanteg.png"),

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, prefer_collection_literals, sort_child_properties_last, sized_box_for_whitespace, use_build_context_synchronously, prefer_if_null_operators, depend_on_referenced_packages, no_leading_underscores_for_local_identifiers, unnecessary_new, unused_local_variable, unnecessary_brace_in_string_interps, unnecessary_import
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, prefer_collection_literals, sort_child_properties_last, sized_box_for_whitespace, use_build_context_synchronously, prefer_if_null_operators, depend_on_referenced_packages, no_leading_underscores_for_local_identifiers, unnecessary_new, unused_local_variable, unnecessary_brace_in_string_interps, unnecessary_import, unnecessary_string_interpolations
 import 'dart:convert';
 import 'dart:io';
 // import 'dart:io';
@@ -329,18 +329,22 @@ class _PartPageHomeState extends State<PartPageHome> {
     if (response.statusCode == 200) {
       if (_usernamePost.toString() == user.toString()) {
         AwesomeDialog(
-          context: context,
-          dismissOnTouchOutside: true,
-          dialogType: DialogType.info,
-          animType: AnimType.rightSlide,
-          btnOkColor: Colors.blue,
-          title: 'Konfirmasi',
-          desc:
-              'Yakin sudah sesuai jadwal absen?\nPress OK untuk melanjutkan absen.',
-          btnOkOnPress: () {
-            postDataAbsen(_usernamePost, _latitPost, _longitPost, _lokasiPost);
-          },
-        ).show();
+                context: context,
+                dismissOnTouchOutside: true,
+                dialogType: DialogType.info,
+                animType: AnimType.rightSlide,
+                btnOkColor: Colors.blue,
+                title: 'Konfirmasi',
+                desc:
+                    'Yakin sudah sesuai jadwal absen?\nPress YA untuk melanjutkan absen.',
+                btnOkOnPress: () {
+                  postDataAbsen(
+                      _usernamePost, _latitPost, _longitPost, _lokasiPost);
+                },
+                btnCancelOnPress: () {},
+                btnOkText: 'Ya',
+                btnCancelText: 'Tidak')
+            .show();
       } else {
         AwesomeDialog(
           context: context,
@@ -466,14 +470,17 @@ class _PartPageHomeState extends State<PartPageHome> {
       // );
       if (string == 'Offline') {
         Timer(
-          const Duration(seconds: 4),
-          () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const PageOffline())));
+            const Duration(seconds: 4),
+            () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const PageOffline())));
       }
     });
   }
 
+  //format tanggal Indo
   var dtNow = new DateTime.now();
+  String hariIndo = '';
+  String tanggalIndo = '';
 
   @override
   void initState() {
@@ -488,6 +495,126 @@ class _PartPageHomeState extends State<PartPageHome> {
     addCustomIcon();
     dtNow;
     super.initState();
+
+    String formatHari(String tanggal) {
+      DateTime dateTime = DateFormat("yyyy-MM-dd").parse(tanggal);
+
+      var day = DateFormat('EEEE').format(dateTime);
+      var hari = "";
+      switch (day) {
+        case 'Sunday':
+          {
+            hari = "Minggu";
+          }
+          break;
+        case 'Monday':
+          {
+            hari = "Senin";
+          }
+          break;
+        case 'Tuesday':
+          {
+            hari = "Selasa";
+          }
+          break;
+        case 'Wednesday':
+          {
+            hari = "Rabu";
+          }
+          break;
+        case 'Thursday':
+          {
+            hari = "Kamis";
+          }
+          break;
+        case 'Friday':
+          {
+            hari = "Jumat";
+          }
+          break;
+        case 'Saturday':
+          {
+            hari = "Sabtu";
+          }
+          break;
+      }
+      return hari;
+    }
+
+    String formatTglIndo(String tanggal) {
+      DateTime dateTime = DateFormat("yyyy-MM-dd").parse(tanggal);
+
+      var m = DateFormat('MM').format(dateTime);
+      var d = DateFormat('dd').format(dateTime).toString();
+      var Y = DateFormat('yyyy').format(dateTime).toString();
+      var month = "";
+      switch (m) {
+        case '01':
+          {
+            month = "Januari";
+          }
+          break;
+        case '02':
+          {
+            month = "Februari";
+          }
+          break;
+        case '03':
+          {
+            month = "Maret";
+          }
+          break;
+        case '04':
+          {
+            month = "April";
+          }
+          break;
+        case '05':
+          {
+            month = "Mei";
+          }
+          break;
+        case '06':
+          {
+            month = "Juni";
+          }
+          break;
+        case '07':
+          {
+            month = "Juli";
+          }
+          break;
+        case '08':
+          {
+            month = "Agustus";
+          }
+          break;
+        case '09':
+          {
+            month = "September";
+          }
+          break;
+        case '10':
+          {
+            month = "Oktober";
+          }
+          break;
+        case '11':
+          {
+            month = "November";
+          }
+          break;
+        case '12':
+          {
+            month = "Desember";
+          }
+          break;
+      }
+      return "$d $month $Y";
+    }
+
+    hariIndo = formatHari(dtNow.toString());
+    tanggalIndo = formatTglIndo(dtNow.toString());
   }
 
   @override
@@ -653,7 +780,7 @@ class _PartPageHomeState extends State<PartPageHome> {
               //     ),
               //     (route) => false,
               //   );
-            } 
+            }
             // else if (value == 1) {
             //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             //     content: Text('Ke Menu Setting'),
@@ -689,381 +816,348 @@ class _PartPageHomeState extends State<PartPageHome> {
         ),
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      body: Container(
-        child: Stack(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(0),
-              height: screenSize.height / 3,
-              child: displayMaps(),
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topRight,
+              colors: <Color>[
+                Colors.white,
+                Color.fromARGB(255, 211, 175, 187),
+                Color.fromARGB(255, 99, 129, 153),
+              ],
             ),
-            // SizedBox(height: 10),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: screenSize.height / 2.4,
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: <Color>[
-                      Color.fromARGB(255, 154, 187, 214),
-                      Color.fromARGB(255, 192, 123, 186),
-                    ],
-                  ),
-                  // color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
+          ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: Column(
                   children: [
-                    SizedBox(height: 15),
-                    distancemeter >= 1000
-                        ? Column(
-                            children: [
-                              // Text(
-                              //   "Lokasi Anda\n$_address\nJarak $distanceToStringKiloMeter KM dari $namaLok",
-                              //   textAlign: TextAlign.center,
-                              //   style: TextStyle(color: Colors.black),
-                              // ),
-                              Text(
-                                "Lokasi Anda $distanceToStringKiloMeter KM dari $namaLok",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black, fontSize: 16),
-                              ),
-                              distancemeter < radius!
-                                  ? Text("(Didalam area absensi)")
-                                  : Text("(Diluar area absensi)")
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              // Text(
-                              //     "Lokasi Anda\n$_address\nJarak $distanceToStringMeter Meter dari $namaLok",
-                              //     textAlign: TextAlign.center,
-                              //     style: TextStyle(color: Colors.black)),
-                              Text(
-                                  "Lokasi Anda $distanceToStringMeter Meter dari $namaLok",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black, fontSize: 16)),
-                              distancemeter < radius!
-                                  ? Text("(Didalam area absensi)")
-                                  : Text("(Diluar area absensi)")
-                            ],
-                          ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: FutureBuilder<DataCekAbsen>(
-                          future: futureDataAbsen,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                    Container(
+                      width: screenSize.width / 1,
+                      height: screenSize.height / 3,
+                      child: displayMaps(),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: 15),
+                        distancemeter >= 1000
+                            ? Column(
                                 children: [
-                                  Column(
+                                  // Text(
+                                  //   "Lokasi Anda\n$_address\nJarak $distanceToStringKiloMeter KM dari $namaLok",
+                                  //   textAlign: TextAlign.center,
+                                  //   style: TextStyle(color: Colors.black),
+                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      InkWell(
-                                        onTap: () {
-                                          distancemeter < radius!
-                                              ? snapshot.data!.c_in == 'YES'
-                                                  ? null
-                                                  : snapshot.data!.ijin == 'YES'
-                                                      ? ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                          SnackBar(
-                                                              content: Text(
-                                                                  "Tidak bisa absen, status Anda sedang ijin...")),
-                                                        )
-                                                      : getData()
-                                              : ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                  SnackBar(
-                                                      content: Text(
-                                                          "Sedang diluar area absen...")),
-                                                );
-                                        },
-                                        child: Container(
-                                          // width: screenSize.width / 2.5,
-                                          // height: screenSize.height / 8,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: Colors.green),
-                                          padding: const EdgeInsets.all(20),
-                                          child: Column(
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Icon(
-                                                    Icons.fingerprint_rounded,
-                                                    size: 40,
-                                                    color: Colors.white,
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  Text("Clock-In",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Colors.white,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight
-                                                                  .bold))
-                                                ],
-                                              ),
-                                              
-                                            ],
-                                          ),
-                                        ),
+                                      Icon(Icons.location_pin,
+                                          color: const Color.fromARGB(
+                                              255, 153, 12, 2),
+                                          size: 15),
+                                      Text(
+                                        "Radius $distanceToStringKiloMeter KM dari $namaLok",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 14),
                                       ),
-                                      SizedBox(height: 5),
-                                      snapshot.data!.c_in == 'YES'
-                                          ? Column(
-                                              children: [
-                                                Text(
-                                                    formatterDate.format(
-                                                        DateTime.parse(
-                                                            "${snapshot.data!.tgl_c_in}")),
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .bold))
-                                              ],
-                                            )
-                                          : Column(
-                                              children: [
-                                                Text("--/--/---- --:--",
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .bold))
-                                              ],
-                                            )
                                     ],
                                   ),
-                                  SizedBox(width: 5),
-                                  Column(
+
+                                  // distancemeter < radius!
+                                  //     ? Text("(Didalam area absensi)")
+                                  //     : Text("(Diluar area absensi)")
+                                  SizedBox(height: 5),
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  // Text(
+                                  //     "Lokasi Anda\n$_address\nJarak $distanceToStringMeter Meter dari $namaLok",
+                                  //     textAlign: TextAlign.center,
+                                  //     style: TextStyle(color: Colors.black)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      InkWell(
-                                        onTap: () {
-                                          distancemeter < radius!
-                                              ? snapshot.data!.c_out == 'YES'
-                                                  ? null
-                                                  : snapshot.data!.ijin == 'YES'
-                                                      ? ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                          SnackBar(
-                                                              content: Text(
-                                                                  "Tidak bisa absen, status Anda sedang ijin...")),
-                                                        )
-                                                      : nowAbsen
-                                                          ? getData()
-                                                          : ScaffoldMessenger
+                                      Icon(Icons.location_pin,
+                                          color: const Color.fromARGB(
+                                              255, 153, 12, 2),
+                                          size: 15),
+                                      Text(
+                                          "Radius $distanceToStringMeter Meter dari $namaLok",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14)),
+                                    ],
+                                  ),
+
+                                  // distancemeter < radius!
+                                  //     ? Text("(Didalam area absensi)")
+                                  //     : Text("(Diluar area absensi)")
+                                  SizedBox(height: 5),
+                                ],
+                              ),
+                        SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: FutureBuilder<DataCekAbsen>(
+                              future: futureDataAbsen,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              distancemeter < radius!
+                                                  ? snapshot.data!.c_in == 'YES'
+                                                      ? null
+                                                      : snapshot.data!.ijin ==
+                                                              'YES'
+                                                          ? ScaffoldMessenger
                                                                   .of(context)
                                                               .showSnackBar(
                                                               SnackBar(
                                                                   content: Text(
-                                                                      "Tidak bisa absen, Anda belum clock-in...")),
+                                                                      "Tidak bisa absen, status Anda sedang ijin...")),
                                                             )
-                                              : ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                  SnackBar(
-                                                      content: Text(
-                                                          "Sedang diluar area absen...")),
-                                                );
-                                        },
-                                        child: Container(
-                                          // width: screenSize.width / 2.5,
-                                          // height: screenSize.height / 8,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: Colors.red),
-                                          padding: const EdgeInsets.all(20),
-                                          child: Column(
-                                            children: [
-                                              Column(
+                                                          : getData()
+                                                  : ScaffoldMessenger.of(
+                                                          context)
+                                                      .showSnackBar(
+                                                      SnackBar(
+                                                          content: Text(
+                                                              "Sedang diluar area absen...")),
+                                                    );
+                                            },
+                                            child: Container(
+                                              width: screenSize.width / 4,
+                                              // height: screenSize.height / 8,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.green),
+                                              padding: const EdgeInsets.all(15),
+                                              child: Column(
                                                 children: [
-                                                  Icon(
-                                                    Icons.fingerprint_rounded,
-                                                    size: 40,
-                                                    color: Colors.white,
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  Text("Clock-Out",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Colors.white,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight
-                                                                  .bold))
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 5),
-                                      snapshot.data!.c_out == 'YES'
-                                          ? Column(
-                                              children: [
-                                                Text(
-                                                    formatterDate.format(
-                                                        DateTime.parse(
-                                                            "${snapshot.data!.tgl_c_out}")),
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .bold))
-                                              ],
-                                            )
-                                          : Column(
-                                              children: [
-                                                Text("--/--/---- --:--",
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .black,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .bold))
-                                              ],
-                                            )
-                                    ],
-                                  ),
-                                ],
-                              );
-                            } else if (snapshot.hasError) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content:
-                                                    Text("Proses Clock-In")),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: screenSize.width / 2.5,
-                                          height: screenSize.height / 8,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.green),
-                                          padding: const EdgeInsets.all(12),
-                                          child: Column(
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
+                                                  Column(
                                                     children: [
                                                       Icon(
-                                                        Icons.login_rounded,
-                                                        size: 25,
+                                                        Icons
+                                                            .fingerprint_rounded,
+                                                        size: 40,
                                                         color: Colors.white,
                                                       ),
-                                                      SizedBox(width: 5),
+                                                      SizedBox(width: 10),
                                                       Text("Clock-In",
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
-                                                              fontSize: 18,
+                                                              fontSize: 10,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .bold))
+                                                                      .bold)),
                                                     ],
-                                                  )
+                                                  ),
                                                 ],
                                               ),
-                                              SizedBox(height: 10),
-                                              Column(
-                                                children: [
-                                                  Text("--/--/---- --:--",
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold))
-                                                ],
-                                              )
-                                            ],
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(height: 5),
+                                          snapshot.data!.c_in == 'YES'
+                                              ? Column(
+                                                  children: [
+                                                    Text(
+                                                        formatterDate.format(
+                                                            DateTime.parse(
+                                                                "${snapshot.data!.tgl_c_in}")),
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold))
+                                                  ],
+                                                )
+                                              : Column(
+                                                  children: [
+                                                    Text("--/--/---- --:--",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold))
+                                                  ],
+                                                )
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  SizedBox(width: 5),
-                                  Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content:
-                                                    Text("Proses Clock-Out")),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: screenSize.width / 2.5,
-                                          height: screenSize.height / 8,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.red),
-                                          padding: const EdgeInsets.all(12),
-                                          child: Column(
-                                            children: [
-                                              Column(
+                                      SizedBox(width: 5),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              distancemeter < radius!
+                                                  ? snapshot.data!.c_out ==
+                                                          'YES'
+                                                      ? null
+                                                      : snapshot.data!.ijin ==
+                                                              'YES'
+                                                          ? ScaffoldMessenger
+                                                                  .of(context)
+                                                              .showSnackBar(
+                                                              SnackBar(
+                                                                  content: Text(
+                                                                      "Tidak bisa absen, status Anda sedang ijin...")),
+                                                            )
+                                                          : nowAbsen
+                                                              ? getData()
+                                                              : ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                  SnackBar(
+                                                                      content: Text(
+                                                                          "Tidak bisa absen, Anda belum clock-in...")),
+                                                                )
+                                                  : ScaffoldMessenger.of(
+                                                          context)
+                                                      .showSnackBar(
+                                                      SnackBar(
+                                                          content: Text(
+                                                              "Sedang diluar area absen...")),
+                                                    );
+                                            },
+                                            child: Container(
+                                              width: screenSize.width / 4,
+                                              // height: screenSize.height / 8,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.red),
+                                              padding: const EdgeInsets.all(15),
+                                              child: Column(
                                                 children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
+                                                  Column(
                                                     children: [
                                                       Icon(
-                                                        Icons.logout_rounded,
-                                                        size: 25,
+                                                        Icons
+                                                            .fingerprint_rounded,
+                                                        size: 40,
                                                         color: Colors.white,
                                                       ),
-                                                      SizedBox(width: 5),
+                                                      SizedBox(width: 10),
                                                       Text("Clock-Out",
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
-                                                              fontSize: 18,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold))
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          snapshot.data!.c_out == 'YES'
+                                              ? Column(
+                                                  children: [
+                                                    Text(
+                                                        formatterDate.format(
+                                                            DateTime.parse(
+                                                                "${snapshot.data!.tgl_c_out}")),
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold))
+                                                  ],
+                                                )
+                                              : Column(
+                                                  children: [
+                                                    Text("--/--/---- --:--",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold))
+                                                  ],
+                                                )
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        "Proses Clock-In")),
+                                              );
+                                            },
+                                            child: Container(
+                                              width: screenSize.width / 2.5,
+                                              height: screenSize.height / 8,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.green),
+                                              padding: const EdgeInsets.all(12),
+                                              child: Column(
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.login_rounded,
+                                                            size: 25,
+                                                            color: Colors.white,
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text("Clock-In",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Column(
+                                                    children: [
+                                                      Text("--/--/---- --:--",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold))
@@ -1071,135 +1165,227 @@ class _PartPageHomeState extends State<PartPageHome> {
                                                   )
                                                 ],
                                               ),
-                                              SizedBox(height: 10),
-                                              Column(
-                                                children: [
-                                                  Text("--/--/---- --:--",
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold))
-                                                ],
-                                              )
-                                            ],
+                                            ),
                                           ),
-                                        ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 5),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        "Proses Clock-Out")),
+                                              );
+                                            },
+                                            child: Container(
+                                              width: screenSize.width / 2.5,
+                                              height: screenSize.height / 8,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.red),
+                                              padding: const EdgeInsets.all(12),
+                                              child: Column(
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .logout_rounded,
+                                                            size: 25,
+                                                            color: Colors.white,
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text("Clock-Out",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Column(
+                                                    children: [
+                                                      Text("--/--/---- --:--",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold))
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                ],
-                              );
-                            }
-                            return const CircularProgressIndicator(
-                              color: Color.fromARGB(255, 168, 17, 156),
-                              strokeWidth: 2,
-                            );
-                          }),
-                    ),
-                    SizedBox(height: 10),
-                    Column(
-                      children: [
-                        Center(
-                          child: Text(
-                              formatterDate2.format(DateTime.parse("${dtNow}")),
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                                  );
+                                }
+                                return const CircularProgressIndicator(
+                                  color: Color.fromARGB(255, 168, 17, 156),
+                                  strokeWidth: 2,
+                                );
+                              }),
+                        ),
+                        SizedBox(height: 10),
+                        Column(
+                          children: [
+                            Center(
+                              // formatterDate2
+                              //         .format(DateTime.parse("${tanggalIndo}")),
+                              child: Text("${hariIndo}, ${tanggalIndo}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: FutureBuilder<DataMtShift>(
+                              future: futureMasterShift,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Center(
+                                            child: Container(
+                                              child: Text("Jam Masuk",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: screenSize.width / 2.5,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: const Color.fromARGB(
+                                                      255, 168, 17, 156)),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(3),
+                                              child: Center(
+                                                  child: Column(
+                                                children: [
+                                                  Text(
+                                                      "${snapshot.data!.jamMasukAwal.toString()}",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Text("s/d",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Text(
+                                                      "${snapshot.data!.jamMasuk.toString()}",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                ],
+                                              )),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Column(
+                                        children: [
+                                          Center(
+                                            child: Container(
+                                              child: Text("Jam Pulang",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: screenSize.width / 2.5,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Color.fromARGB(
+                                                      255, 168, 17, 156)),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(3),
+                                              child: Center(
+                                                  child: Column(
+                                                children: [
+                                                  Text(
+                                                      "${snapshot.data!.jamPulang}",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Text("s/d",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Text(
+                                                      "${snapshot.data!.jamPulangAkhir}",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                ],
+                                              )),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("${snapshot.error}");
+                                }
+                                return const CircularProgressIndicator(
+                                  color: Color.fromARGB(255, 168, 17, 156),
+                                  strokeWidth: 2,
+                                );
+                              }),
                         )
                       ],
                     ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: FutureBuilder<DataMtShift>(
-                          future: futureMasterShift,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Center(
-                                        child: Container(
-                                          child: Text("Jam Masuk",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: screenSize.width / 2.5,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: Colors.white),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Center(
-                                            child: Text(
-                                                "${snapshot.data!.jamMasukAwal.toString()} - ${snapshot.data!.jamMasuk.toString()}",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Column(
-                                    children: [
-                                      Center(
-                                        child: Container(
-                                          child: Text("Jam Pulang",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: screenSize.width / 2.5,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: Colors.white),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: Center(
-                                            child: Text(
-                                                "${snapshot.data!.jamPulang} - ${snapshot.data!.jamPulangAkhir}",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text("${snapshot.error}");
-                            }
-                            return const CircularProgressIndicator(
-                              color: Color.fromARGB(255, 168, 17, 156),
-                              strokeWidth: 2,
-                            );
-                          }),
-                    )
                   ],
                 ),
               ),
-            ),
-          ],
+
+              // SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
