@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_element, avoid_unnecessary_containers, avoid_print, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_element, avoid_unnecessary_containers, avoid_print, use_build_context_synchronously, depend_on_referenced_packages, sort_child_properties_last
 
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_login.dart';
@@ -8,6 +8,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PartPageIjin extends StatefulWidget {
   const PartPageIjin({super.key});
@@ -21,12 +24,27 @@ class _PartPageIjinState extends State<PartPageIjin> {
   var txtEditKetIjin = TextEditingController();
   var dateinput1 = TextEditingController();
   var dateinput2 = TextEditingController();
+  final List<File> selectedImages = [];
   String username = "";
   String? kodeLok;
   String? namaLok;
   double? latit = 0;
   double? longit = 0;
   double? radius = 0;
+
+  Future<void> addImages() async {
+    final picker = ImagePicker();
+    final List<XFile> images = await picker.pickMultiImage(
+      maxWidth: 300, // can be customized
+      maxHeight: 400, // can be customized
+    );
+
+    if (images != null) {
+      for (XFile image in images) {
+        selectedImages.add(File(image.path));
+      }
+    }
+  }
 
   Widget inputUsername() {
     return TextFormField(
@@ -254,11 +272,13 @@ class _PartPageIjinState extends State<PartPageIjin> {
     var usr = prefs.getString('username');
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      submitFormIjin(usr,latit,longit,kodeLok,txtEditKetIjin.text, dateinput1.text, dateinput2.text);
+      submitFormIjin(usr, latit, longit, kodeLok, txtEditKetIjin.text,
+          dateinput1.text, dateinput2.text);
     }
   }
 
-  submitFormIjin(username, lat, long, lokasi, keterangan, tglAwal, tglAkhir) async {
+  submitFormIjin(
+      username, lat, long, lokasi, keterangan, tglAwal, tglAkhir) async {
     AwesomeDialog(
       context: context,
       dismissOnTouchOutside: false,
@@ -268,7 +288,8 @@ class _PartPageIjinState extends State<PartPageIjin> {
       title: 'Konfirmasi',
       desc: 'Yakin akan melanjutkan proses ijin?\n Press OK untuk melanjutkan.',
       btnOkOnPress: () {
-        postDataIjin(username, lat, long, lokasi, keterangan, tglAwal, tglAkhir);
+        postDataIjin(
+            username, lat, long, lokasi, keterangan, tglAwal, tglAkhir);
       },
     ).show();
   }
@@ -374,6 +395,7 @@ class _PartPageIjinState extends State<PartPageIjin> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 250, 250, 252),
@@ -409,7 +431,7 @@ class _PartPageIjinState extends State<PartPageIjin> {
           }, onSelected: (value) {
             if (value == 0) {
               logOut();
-            } 
+            }
             // else if (value == 1) {
             //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             //     content: Text('Ke Menu Setting'),
@@ -434,7 +456,31 @@ class _PartPageIjinState extends State<PartPageIjin> {
                       const SizedBox(height: 20.0),
                       date1(),
                       const SizedBox(height: 20.0),
-                      date2()
+                      date2(),
+                      const SizedBox(height: 20.0),
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.image, color: Colors.black),
+                        onPressed: () async {
+                          await addImages();
+                          setState(() {});
+                        },
+                        label: Text('Lampiran'),
+                        style: ElevatedButton.styleFrom(
+                            minimumSize:
+                                Size.fromHeight(screenSize.height / 15),
+                            foregroundColor: Colors.black),
+                      ),
+                      const SizedBox(height: 20.0),
+                      InkWell(
+                        onTap: () {
+                          // selectedImages.removeAt(imagesPath.values.toList().indexOf(f));
+                        },
+                        child: Column(
+                          children: selectedImages
+                              .map((image) => Image.file(image))
+                              .toList(),
+                        ),
+                      ),
                     ],
                   )),
               Container(
@@ -442,7 +488,8 @@ class _PartPageIjinState extends State<PartPageIjin> {
                     const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                 child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 168, 17, 156),
+                        backgroundColor:
+                            const Color.fromARGB(255, 168, 17, 156),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: const BorderSide(color: Colors.white60),
@@ -461,7 +508,8 @@ class _PartPageIjinState extends State<PartPageIjin> {
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     )),
-              )
+              ),
+              const SizedBox(height: 30.0)
             ],
           ),
         ),

@@ -50,6 +50,8 @@ dependencies:
   flutter_timeline_calendar: ^1.0.9
   flutter_jailbreak_detection: ^1.10.0
   connectivity_plus: ^5.0.2
+  image_picker: ^1.0.7
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:
