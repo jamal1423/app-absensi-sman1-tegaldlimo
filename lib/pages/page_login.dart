@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:location/location.dart' as locationv2;
+import 'package:app_presensi_smantegaldlimo/globals/apiUrl.dart' as url_api;
 
 class PageLogin extends StatefulWidget {
   const PageLogin({super.key});
@@ -20,33 +20,6 @@ class _PageLoginState extends State<PageLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var txtEditUsername = TextEditingController();
   var txtEditPwd = TextEditingController();
-
-  // locationv2.Location lokasi = locationv2.Location();
-
-  // request permission
-  // Future<bool> requestPermission() async {
-  //   bool serviceEnabled;
-  //   locationv2.PermissionStatus permissionGranted;
-  //   serviceEnabled = await lokasi.serviceEnabled();
-
-  //   //ceck service
-  //   if (!serviceEnabled) {
-  //     serviceEnabled = await lokasi.requestService();
-  //     if (!serviceEnabled) {
-  //       return false;
-  //     }
-  //   }
-
-  //   //ceck permission
-  //   permissionGranted = await lokasi.hasPermission();
-  //   if (permissionGranted == locationv2.PermissionStatus.denied) {
-  //     permissionGranted = await lokasi.requestPermission();
-  //     if (permissionGranted != locationv2.PermissionStatus.granted) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
 
   Widget inputUsername() {
     return TextFormField(
@@ -169,7 +142,7 @@ class _PageLoginState extends State<PageLogin> {
 
     try {
       final response = await http.post(
-          Uri.parse("https://smantegaldlimo.startdev.my.id/api/v1/proses-login"),
+          Uri.parse("${url_api.baseUrl}/api/v1/proses-login"),
           body: {
             "username": username,
             "password": password,

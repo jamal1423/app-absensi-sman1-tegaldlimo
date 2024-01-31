@@ -10,6 +10,7 @@ import 'package:app_presensi_smantegaldlimo/models/data_user.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_login.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_offline.dart';
+// import 'package:app_presensi_smantegaldlimo/globals/apiUrl.dart' as url_api;
 // import 'package:app_presensi_smantegaldlimo/utils/util_card_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:app_presensi_smantegaldlimo/globals/apiUrl.dart' as url_api;
 
 class PartPageHome extends StatefulWidget {
   const PartPageHome({super.key});
@@ -38,11 +40,7 @@ class PartPageHome extends StatefulWidget {
 }
 
 class _PartPageHomeState extends State<PartPageHome> {
-  //sma
-
-  //kosan
-  // LatLng initialLocation = LatLng(-7.378822662421588, 112.646988897764);
-
+  
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
 
   LatLng? _currentPosition;
@@ -173,24 +171,6 @@ class _PartPageHomeState extends State<PartPageHome> {
     );
   }
 
-  // Future<void> initPlatformState() async {
-  //   await Permission.location.request();
-  //   if (await Permission.location.isPermanentlyDenied) {
-  //     openAppSettings();
-  //   }
-
-  //   if (!mounted) return;
-  //   try {
-  //     canMockLocation = await SafeDevice.canMockLocation;
-  //   } catch (error) {
-  //     print(error);
-  //   }
-
-  //   setState(() {
-  //     canMockLocation = canMockLocation;
-  //   });
-  // }
-
   notifFakeGps() {
     AwesomeDialog(
       context: context,
@@ -308,8 +288,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     final prefs = await SharedPreferences.getInstance();
     var user = prefs.getString('username');
     final response = await http.get(
-        Uri.parse(
-            "https://smantegaldlimo.startdev.my.id/api/v1/get-data-user/$user"),
+        Uri.parse("${url_api.baseUrl}/api/v1/get-data-user/$user"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         });
@@ -366,8 +345,8 @@ class _PartPageHomeState extends State<PartPageHome> {
   postDataAbsen(usernamePost, latitPost, longitPost, lokasiPost) async {
     final response = await http.post(
         Uri.parse(nowAbsen
-            ? 'https://smantegaldlimo.startdev.my.id/api/v1/update-absensi-user'
-            : 'https://smantegaldlimo.startdev.my.id/api/v1/proses-absensi-user'),
+            ? "${url_api.baseUrl}/api/v1/update-absensi-user"
+            : "${url_api.baseUrl}/api/v1/proses-absensi-user"),
         body: {
           "username": usernamePost,
           "latitude": latitPost.toString(),
@@ -490,7 +469,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     futureMasterShift = fetchMasterShift();
     getPref();
     getLocation();
-    // initPlatformState();
+    initPlatformState();
     //getPlace();
     addCustomIcon();
     dtNow;
@@ -1100,144 +1079,15 @@ class _PartPageHomeState extends State<PartPageHome> {
                                     ],
                                   );
                                 } else if (snapshot.hasError) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        "Proses Clock-In")),
-                                              );
-                                            },
-                                            child: Container(
-                                              width: screenSize.width / 2.5,
-                                              height: screenSize.height / 8,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.green),
-                                              padding: const EdgeInsets.all(12),
-                                              child: Column(
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.login_rounded,
-                                                            size: 25,
-                                                            color: Colors.white,
-                                                          ),
-                                                          SizedBox(width: 5),
-                                                          Text("Clock-In",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold))
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  Column(
-                                                    children: [
-                                                      Text("--/--/---- --:--",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold))
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 5),
-                                      Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        "Proses Clock-Out")),
-                                              );
-                                            },
-                                            child: Container(
-                                              width: screenSize.width / 2.5,
-                                              height: screenSize.height / 8,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.red),
-                                              padding: const EdgeInsets.all(12),
-                                              child: Column(
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .logout_rounded,
-                                                            size: 25,
-                                                            color: Colors.white,
-                                                          ),
-                                                          SizedBox(width: 5),
-                                                          Text("Clock-Out",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold))
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  Column(
-                                                    children: [
-                                                      Text("--/--/---- --:--",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold))
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children:[
+                                      Text("Anda tidak dapat melakukan absen.", style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold)),
+                                      Text("Terjadi kesalahan saat memuat data."),
+                                      Text("Coba lagi, atau hubungi Administrator."),
+                                      SizedBox(height: 20)
+                                    ]
+                                    );
                                 }
                                 return const CircularProgressIndicator(
                                   color: Color.fromARGB(255, 168, 17, 156),
@@ -1396,7 +1246,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     var ss = prefs.getString('username');
     final response = await http.get(
         Uri.parse(
-            "https://smantegaldlimo.startdev.my.id/api/v1/get-data-user/$ss"),
+            "${url_api.baseUrl}/api/v1/get-data-user/$ss"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         });
@@ -1415,7 +1265,7 @@ class _PartPageHomeState extends State<PartPageHome> {
       // final prefs = await SharedPreferences.getInstance();
       // var ss = prefs.getString('username');
       final response = await http.get(Uri.parse(
-          "https://smantegaldlimo.startdev.my.id/api/v1/get-cek-lokasi/$usr"));
+          "${url_api.baseUrl}/api/v1/get-cek-lokasi/$usr"));
 
       Map<String, dynamic> temp = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -1448,7 +1298,7 @@ class _PartPageHomeState extends State<PartPageHome> {
     var ss = prefs.getString('username');
     final response = await http.get(
         Uri.parse(
-            "https://smantegaldlimo.startdev.my.id/api/v1/cek-absensi-user/$ss"),
+            "${url_api.baseUrl}/api/v1/cek-absensi-user/$ss"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         });
@@ -1474,7 +1324,7 @@ class _PartPageHomeState extends State<PartPageHome> {
   Future<DataMtShift> fetchMasterShift() async {
     final response = await http.get(
         Uri.parse(
-            "https://smantegaldlimo.startdev.my.id/api/v1/get-master-shift"),
+            "${url_api.baseUrl}/api/v1/get-master-shift"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         });

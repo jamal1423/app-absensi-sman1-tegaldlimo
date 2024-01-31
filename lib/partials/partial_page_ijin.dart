@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_element, avoid_unnecessary_containers, avoid_print, use_build_context_synchronously, depend_on_referenced_packages, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_element, avoid_unnecessary_containers, avoid_print, use_build_context_synchronously, depend_on_referenced_packages, sort_child_properties_last, unnecessary_brace_in_string_interps, sized_box_for_whitespace
 
 import 'package:app_presensi_smantegaldlimo/pages/page_home.dart';
 import 'package:app_presensi_smantegaldlimo/pages/page_login.dart';
@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:app_presensi_smantegaldlimo/globals/apiUrl.dart' as url_api;
 
 class PartPageIjin extends StatefulWidget {
   const PartPageIjin({super.key});
@@ -21,7 +22,7 @@ class PartPageIjin extends StatefulWidget {
 
 class _PartPageIjinState extends State<PartPageIjin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var txtEditKetIjin = TextEditingController();
+  var txtEditDeskIjin = TextEditingController();
   var dateinput1 = TextEditingController();
   var dateinput2 = TextEditingController();
   final List<File> selectedImages = [];
@@ -31,6 +32,9 @@ class _PartPageIjinState extends State<PartPageIjin> {
   double? latit = 0;
   double? longit = 0;
   double? radius = 0;
+
+  List<String> list = <String>['','Sakit', 'Ijin', 'Dinas Luar'];
+  String valueIjin = '';
 
   Future<void> addImages() async {
     final picker = ImagePicker();
@@ -46,27 +50,94 @@ class _PartPageIjinState extends State<PartPageIjin> {
     }
   }
 
-  Widget inputUsername() {
+  Widget dropDownIjin() {
+    String dropdownValue = list.first;
+    return DropdownButtonFormField<String>(
+      autofocus: true,
+      validator: (String? arg) {
+        if (arg == null || arg.isEmpty) {
+          return 'Jenis ijin harus diisi';
+        } else {
+          return null;
+        }
+      },
+      isExpanded: false,
+      isDense: true,
+      alignment: Alignment.center,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Colors.black,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(5.0),
+          ),
+        ),
+        fillColor: Colors.grey,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: const BorderSide(
+            color: Colors.black,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: const BorderSide(
+            color: Colors.black,
+            width: 1.0,
+          ),
+        ),
+        prefixIcon: const Icon(
+          Icons.moving_rounded,
+          color: Colors.black,
+        ),
+        hintText: 'Pilih Jenis Ijin',
+        hintStyle: const TextStyle(color: Color.fromARGB(255, 204, 202, 202)),
+        labelText: "Jenis Ijin",
+        labelStyle:
+            const TextStyle(color: Color.fromARGB(255, 204, 202, 202)),
+        filled: false,
+      ),
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: Colors.black),
+      onChanged: (String? value) {
+        setState(() {
+          dropdownValue = value!;
+          valueIjin = dropdownValue;
+        });
+      },
+      items: list.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget inputDeskripsi() {
     return TextFormField(
         cursorColor: Colors.black,
         keyboardType: TextInputType.text,
         autofocus: false,
-        validator: (String? arg) {
-          if (arg == null || arg.isEmpty) {
-            return 'Keterangan harus diisi';
-          } else {
-            return null;
-          }
-        },
-        controller: txtEditKetIjin,
+        // validator: (String? arg) {
+        //   if (arg == null || arg.isEmpty) {
+        //     return 'Keterangan harus diisi';
+        //   } else {
+        //     return null;
+        //   }
+        // },
+        controller: txtEditDeskIjin,
         onSaved: (String? val) {
-          txtEditKetIjin.text = val!;
+          txtEditDeskIjin.text = val!;
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          hintText: 'Masukkan Keterangan Ijin',
+          hintText: 'Masukkan Deskripsi Ijin (optional)',
           hintStyle: const TextStyle(color: Color.fromARGB(255, 204, 202, 202)),
-          labelText: "Keterangan Ijin",
+          labelText: "Deskripsi Ijin",
           labelStyle:
               const TextStyle(color: Color.fromARGB(255, 204, 202, 202)),
           prefixIcon: const Icon(
@@ -247,7 +318,7 @@ class _PartPageIjinState extends State<PartPageIjin> {
   Future getDataLokasiUser(usr) async {
     try {
       final response = await http.get(Uri.parse(
-          "https://smantegaldlimo.startdev.my.id/api/v1/get-cek-lokasi/$usr"));
+          "${url_api.baseUrl}/api/v1/get-cek-lokasi/$usr"));
 
       Map<String, dynamic> temp = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -272,13 +343,15 @@ class _PartPageIjinState extends State<PartPageIjin> {
     var usr = prefs.getString('username');
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      submitFormIjin(usr, latit, longit, kodeLok, txtEditKetIjin.text,
-          dateinput1.text, dateinput2.text);
+      submitFormIjin(usr, latit, longit, kodeLok, valueIjin,
+          txtEditDeskIjin.text ,dateinput1.text, dateinput2.text);
+      // submitFormIjin(usr, latit, longit, kodeLok, txtEditKetIjin.text,
+      //     dateinput1.text, dateinput2.text);
     }
   }
 
   submitFormIjin(
-      username, lat, long, lokasi, keterangan, tglAwal, tglAkhir) async {
+      username, lat, long, lokasi, keterangan, deskripsi, tglAwal, tglAkhir) async {
     AwesomeDialog(
       context: context,
       dismissOnTouchOutside: false,
@@ -289,25 +362,38 @@ class _PartPageIjinState extends State<PartPageIjin> {
       desc: 'Yakin akan melanjutkan proses ijin?\n Press OK untuk melanjutkan.',
       btnOkOnPress: () {
         postDataIjin(
-            username, lat, long, lokasi, keterangan, tglAwal, tglAkhir);
+            username, lat, long, lokasi, keterangan, deskripsi, tglAwal, tglAkhir);
       },
     ).show();
   }
 
-  postDataIjin(usernamePost, latitPost, longitPost, lokasiPost, ketIjinPost,
-      tglIjinAwPost, tglIjinAkPost) async {
+  postDataIjin(usernamePost, latitPost, longitPost, lokasiPost, ketIjinPost, deskIjinPost,
+    tglIjinAwPost, tglIjinAkPost) async {
+    String apiUrl = "${url_api.baseUrl}/api/v1/proses-absensi-user";
     final response = await http.post(
-        Uri.parse(
-            'https://smantegaldlimo.startdev.my.id/api/v1/proses-absensi-user'),
+        Uri.parse(apiUrl),
+        // headers: {
+        //   'Content-Type': 'multipart/form-data',
+        // },
         body: {
           "username": usernamePost,
           "latitude": latitPost.toString(),
           "longitude": longitPost.toString(),
           "lokasi": lokasiPost,
           "ket_ijin": ketIjinPost,
+          "deskripsi": deskIjinPost,
           "tgl_ijin_awal": tglIjinAwPost,
           "tgl_ijin_akhir": tglIjinAkPost,
+          // "doc_ijin": fotoPost,
         });
+
+        // final request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+        // for (File image in selectedImages) {
+        //   request.files.add(await http.MultipartFile.fromPath(
+        //     'doc_ijin[]',
+        //     image.path,
+        //   ));
+        // }
 
     final resp = jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -452,28 +538,37 @@ class _PartPageIjinState extends State<PartPageIjin> {
                       const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                   child: Column(
                     children: <Widget>[
-                      inputUsername(),
+                      dropDownIjin(),
+                      const SizedBox(height: 20.0),
+                      inputDeskripsi(),
                       const SizedBox(height: 20.0),
                       date1(),
                       const SizedBox(height: 20.0),
                       date2(),
-                      const SizedBox(height: 20.0),
-                      ElevatedButton.icon(
-                        icon: Icon(Icons.image, color: Colors.black),
-                        onPressed: () async {
-                          await addImages();
-                          setState(() {});
-                        },
-                        label: Text('Lampiran'),
-                        style: ElevatedButton.styleFrom(
-                            minimumSize:
-                                Size.fromHeight(screenSize.height / 15),
-                            foregroundColor: Colors.black),
-                      ),
+                      // Text("Value : ${valueIjin}"),
+                      // const SizedBox(height: 20.0),
+                      // ElevatedButton.icon(
+                      //   icon: Icon(Icons.image, color: Colors.black),
+                      //   onPressed: () async {
+                      //     await addImages();
+                      //     setState(() {});
+                      //   },
+                      //   label: Text('Lampiran'),
+                      //   style: ElevatedButton.styleFrom(
+                      //       minimumSize:
+                      //           Size.fromHeight(screenSize.height / 15),
+                      //       foregroundColor: Colors.black),
+                      // ),
                       const SizedBox(height: 20.0),
                       InkWell(
                         onTap: () {
                           // selectedImages.removeAt(imagesPath.values.toList().indexOf(f));
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //       content: Column(
+                          //       children: selectedImages.map((image) => Image.file(image)).toList(),
+                          //   )),
+                          // );
                         },
                         child: Column(
                           children: selectedImages

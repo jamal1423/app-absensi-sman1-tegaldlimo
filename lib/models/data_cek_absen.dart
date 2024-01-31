@@ -10,11 +10,12 @@ class DataCekAbsen {
   String? late_;
   String? early;
   String? overtime;
-  String? latitude;
-  String? longitude;
+  // String? latitude;
+  // String? longitude;
   String? lokasi;
   String? ijin;
   String? ket_ijin;
+  String? deskripsi;
   String? tgl_ijin_awal;
   String? tgl_ijin_akhir;
   String? status_ijin;
@@ -30,11 +31,12 @@ class DataCekAbsen {
     this.late_,
     this.early,
     this.overtime,
-    this.latitude,
-    this.longitude,
+    // this.latitude,
+    // this.longitude,
     this.lokasi,
     this.ijin,
     this.ket_ijin,
+    this.deskripsi,
     this.tgl_ijin_awal,
     this.tgl_ijin_akhir,
     this.status_ijin,
@@ -52,11 +54,12 @@ class DataCekAbsen {
       late_: json['late'],
       early: json['early'],
       overtime: json['overtime'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+      // latitude: json['latitude'],
+      // longitude: json['longitude'],
       lokasi: json['lokasi'],
       ijin: json['ijin'],
       ket_ijin: json['ket_ijin'],
+      deskripsi: json['deskripsi'],
       tgl_ijin_awal: json['tgl_ijin_awal'],
       tgl_ijin_akhir: json['tgl_ijin_akhir'],
       status_ijin: json['status_ijin'],

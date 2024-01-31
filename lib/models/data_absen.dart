@@ -17,6 +17,7 @@ class DataAbsen {
   String? namaLokasi;
   String? ijin;
   String? ketIjin;
+  String? deskripsi;
   String? tglIjinAwal;
   String? tglIjinAkhir;
   String? statusIjin;
@@ -39,6 +40,7 @@ class DataAbsen {
     this.namaLokasi,
     this.ijin,
     this.ketIjin,
+    this.deskripsi,
     this.tglIjinAwal,
     this.tglIjinAkhir,
     this.statusIjin,
@@ -46,29 +48,31 @@ class DataAbsen {
   });
 
   DataAbsen.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    username = json["username"];
-    namaPegawai = json["nama_pegawai"];
-    c_in = json["c_in"];
-    tgl_c_in = json["tgl_c_in"];
-    c_out = json["c_out"];
-    tgl_c_out = json["tgl_c_out"];
-    lateS = json["late"];
-    early = json["early"];
-    overtime = json["overtime"];
-    latitude = json["latitude"];
-    longitude = json["longitude"];
-    lokasi = json["lokasi"];
-    namaLokasi = json["nama_lokasi"];
-    ijin = json["ijin"];
-    ketIjin = json["ket_ijin"];
-    tglIjinAwal = json["tgl_ijin_awal"];
-    tglIjinAkhir = json["tgl_ijin_akhir"];
-    statusIjin = json["status_ijin"];
-    docIjin = json["doc_ijin"];
+    id = json["id"].toString();
+    username = json["username"].toString();
+    namaPegawai = json["nama_pegawai"].toString();
+    c_in = json["c_in"].toString();
+    tgl_c_in = json["tgl_c_in"].toString();
+    c_out = json["c_out"].toString();
+    tgl_c_out = json["tgl_c_out"].toString();
+    lateS = json["late"].toString();
+    early = json["early"].toString();
+    overtime = json["overtime"].toString();
+    latitude = json["latitude"].toString();
+    longitude = json["longitude"].toString();
+    lokasi = json["lokasi"].toString();
+    namaLokasi = json["nama_lokasi"].toString();
+    ijin = json["ijin"].toString();
+    ketIjin = json["ket_ijin"].toString();
+    deskripsi = json["deskripsi"].toString();
+    tglIjinAwal = json["tgl_ijin_awal"].toString();
+    tglIjinAkhir = json["tgl_ijin_akhir"].toString();
+    statusIjin = json["status_ijin"].toString();
+    docIjin = json["doc_ijin"].toString();
 
     Map<String, dynamic> toJson() {
       final Map<String, dynamic> data = <String, dynamic>{};
+      data['id'] = id;
       data['username'] = username;
       data['nama_pegawai'] = namaPegawai;
       data['c_in'] = c_in;
@@ -84,6 +88,7 @@ class DataAbsen {
       data['nama_lokasi'] = namaLokasi;
       data['ijin'] = ijin;
       data['ket_ijin'] = ketIjin;
+      data['deskripsi'] = deskripsi;
       data['tgl_ijin_awal'] = tglIjinAwal;
       data['tgl_ijin_akhir'] = tglIjinAkhir;
       data['status_ijin'] = statusIjin;
